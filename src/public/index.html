@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-Commerce - Portal de Productos</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main>
+    <header>
+      <h1>🛒 E-Commerce Portal</h1>
+      <div id="cartBadge" style="display:none;">
+        Carrito: <span id="cartCount">0</span> items
+      </div>
+    </header>
+
+    <!-- SECCIÓN DE AUTENTICACIÓN -->
+    <section id="auth">
+      <div class="auth-container">
+        <div class="auth-box">
+          <h2>📝 Registro</h2>
+          <input id="regUser" placeholder="Usuario" />
+          <input id="regPass" type="password" placeholder="Contraseña" />
+          <select id="regRole">
+            <option value="user">Usuario</option>
+            <option value="admin">Administrador</option>
+          </select>
+          <button id="btnRegister">Registrar</button>
+        </div>
+
+        <div class="auth-box">
+          <h2>🔐 Login</h2>
+          <input id="loginUser" placeholder="Usuario" />
+          <input id="loginPass" type="password" placeholder="Contraseña" />
+          <button id="btnLogin">Entrar</button>
+        </div>
+      </div>
+      <div id="status"></div>
+    </section>
+
+    <!-- APLICACIÓN PRINCIPAL -->
+    <section id="app" style="display:none;">
+      <div class="user-info">
+        <p>👤 <strong><span id="username"></span></strong> (<span id="role"></span>)</p>
+        <button id="btnLogout" class="btn-secondary">Cerrar sesión</button>
+      </div>
+
+      <!-- MENÚ DE NAVEGACIÓN -->
+      <nav class="nav-menu">
+        <button id="btnGoProducts" class="nav-btn">🛍️ Productos</button>
+        <button id="btnGoCart" class="nav-btn">🛒 Mi Carrito</button>
+        <button id="btnGoMyOrders" class="nav-btn">📦 Mis Pedidos</button>
+        <button id="btnGoChat" class="nav-btn">💬 Chat</button>
+        <button id="btnGoAdmin" class="nav-btn admin-only" style="display:none;">⚙️ Admin</button>
+      </nav>
+
+      <!-- VISTA DE PRODUCTOS -->
+      <div id="productsView" style="display:none;">
+        <h2>📦 Catálogo de Productos</h2>
+        <div id="productsList" class="products-grid"></div>
+      </div>
+
+      <!-- VISTA DEL CARRITO -->
+      <div id="cartView" style="display:none;">
+        <h2>🛒 Mi Carrito de Compras</h2>
+        <div id="cartItems"></div>
+        <div id="cartSummary"></div>
+      </div>
+
+      <!-- VISTA DE MIS PEDIDOS -->
+      <div id="myOrdersView" style="display:none;">
+        <h2>📦 Mis Pedidos</h2>
+        <div id="myOrdersList"></div>
+      </div>
+
+      <!-- PANEL DE ADMINISTRACIÓN -->
+      <div id="adminView" style="display:none;">
+        <h2>⚙️ Panel de Administración</h2>
+        
+        <div class="admin-tabs">
+          <button class="tab-btn active" data-tab="admin-products">Productos</button>
+          <button class="tab-btn" data-tab="admin-orders">Pedidos</button>
+          <button class="tab-btn" data-tab="admin-users">Usuarios</button>
+        </div>
+
+        <!-- Tab: Gestión de Productos -->
+        <div id="admin-products" class="tab-content active">
+          <h3>Crear Producto</h3>
+          <div class="form-group">
+            <input id="pName" placeholder="Nombre del producto" />
+            <input id="pPrice" type="number" step="0.01" placeholder="Precio" />
+            <textarea id="pDesc" placeholder="Descripción"></textarea>
+            <button id="btnCreateProduct">Crear Producto</button>
+          </div>
+          <h3>Listado de Productos</h3>
+          <div id="adminProductsList"></div>
+        </div>
+
+        <!-- Tab: Gestión de Pedidos -->
+        <div id="admin-orders" class="tab-content">
+          <h3>Filtrar Pedidos</h3>
+          <select id="orderStatusFilter">
+            <option value="">Todos</option>
+            <option value="pending">En curso (Pending)</option>
+            <option value="completed">Completados</option>
+          </select>
+          <button id="btnFilterOrders">Filtrar</button>
+          <div id="adminOrdersList"></div>
+        </div>
+
+        <!-- Tab: Gestión de Usuarios -->
+        <div id="admin-users" class="tab-content">
+          <h3>Usuarios Registrados</h3>
+          <div id="adminUsersList"></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Al final del body, solo estos scripts: -->
+<script type="module" src="/graphqlClient.js"></script>
+<script type="module" src="/cartManager.js"></script>
+<script type="module" src="/app.js"></script>
+</body>
+</html>

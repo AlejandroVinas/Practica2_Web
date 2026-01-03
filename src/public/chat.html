@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>Chat - Portal</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <main>
+    <h1>Chat</h1>
+    <div>
+      <strong>Usuario:</strong> <span id="userName"></span>
+      <button id="btnBack">Volver</button>
+    </div>
+
+    <div id="chatBox" style="border:1px solid #ccc; height:300px; overflow:auto; padding:10px;"></div>
+
+    <input id="msgInput" placeholder="Escribe..." />
+    <button id="sendBtn">Enviar</button>
+  </main>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Tomar token desde localStorage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("No autenticado. Vuelve al inicio.");
+      window.location.href = "/";
+    }
+
+    // Decodificar nombre simple (no es seguro, solo UX): buscar user en localStorage
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
+    document.getElementById("userName").innerText = user.username || "Invitado";
+
+    // Conexión Socket.IO con token en auth
+    const socket = io({ auth: { token } });
+
+    const chatBox = document.getElementById("chatBox");
+    const msgInput = document.getElementById("msgInput");
+    const sendBtn = document.getElementById("sendBtn");
+
+    socket.on("connect_error", (err) => {
+      alert("Error conexión al chat: " + err.message);
+      console.error(err);
+    });
+
+    socket.on("message", (msg) => {
+      const d = new Date(msg.time);
+      const line = document.createElement("div");
+      line.innerText = `[${d.toLocaleTimeString()}] ${msg.user}: ${msg.text}`;
+      chatBox.appendChild(line);
+      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    sendBtn.onclick = () => {
+      const text = msgInput.value.trim();
+      if (!text) return;
+      socket.emit("message", text);
+      msgInput.value = "";
+    };
+
+    document.getElementById("btnBack").onclick = () => {
+      window.location.href = "/";
+    };
+  </script>
+</body>
+</html>
